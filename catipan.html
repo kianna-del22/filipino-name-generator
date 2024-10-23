@@ -1,0 +1,390 @@
+<html><head><base href="https://filipinonames.websim.dev/">
+<title>Filipino Name Generator | Pangalang Pilipino</title>
+<style>
+:root {
+  --primary: #FCD116; /* Yellow */
+  --secondary: #0038A8; /* Blue */
+  --accent: #CE1126; /* Red */
+  --text: #333;
+  --background: linear-gradient(135deg, 
+    #0038A8 0%, /* Blue */
+    #0038A8 33%, 
+    #CE1126 33%, /* Red */
+    #CE1126 66%,
+    #FCD116 66%, /* Yellow */
+    #FCD116 100%
+  );
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: var(--background);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  max-width: 800px;
+  text-align: center;
+  margin: 20px;
+}
+
+h1 {
+  color: var(--secondary);
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.name-box {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin: 20px 0;
+  border: 3px solid var(--primary);
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
+}
+
+.name-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary), var(--secondary), var(--accent));
+}
+
+#generatedName {
+  font-size: 2em;
+  color: var(--accent);
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  perspective: 1000px;
+}
+
+.name-part {
+  opacity: 0;
+  transform-origin: center;
+  transform: rotateX(-90deg);
+  display: inline-block;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.name-reveal {
+  opacity: 1;
+  transform: rotateX(0deg);
+}
+
+.meaning-part {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.meaning-reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#meaningText {
+  font-style: italic;
+  color: #666;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+button {
+  background: var(--secondary);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background: var(--accent);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+
+button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(transparent, rgba(255,255,255,0.2), transparent);
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+}
+
+button:hover::after {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+.sun-stars {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* New reveal animations */
+.reveal-container {
+  position: relative;
+}
+
+.reveal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    var(--primary), 
+    var(--secondary), 
+    var(--accent)
+  );
+  transform-origin: left;
+  animation: revealSwipe 1s cubic-bezier(0.8, 0, 0.2, 1) forwards;
+}
+
+@keyframes revealSwipe {
+  0% {
+    transform: scaleX(0);
+  }
+  50% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
+.name-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px) rotate(-20deg);
+  animation: popIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes popIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
+  
+  #generatedName {
+    font-size: 1.5em;
+  }
+  
+  .sun-stars {
+    width: 60px;
+    height: 60px;
+  }
+}
+</style>
+</head>
+<body>
+
+<svg class="sun-stars" viewBox="0 0 100 100">
+  <polygon points="50,10 61,40 92,40 67,60 77,90 50,70 23,90 33,60 8,40 39,40" fill="#FCD116">
+    <animate attributeName="opacity" values="1;0.7;1" dur="3s" repeatCount="indefinite"/>
+  </polygon>
+  <circle cx="50" cy="50" r="10" fill="#FCD116"/>
+</svg>
+
+<div class="container">
+  <h1>Filipino Name Generator</h1>
+  <p>Generate authentic Filipino names with meanings</p>
+  
+  <div class="name-box">
+    <div class="reveal-container">
+      <div id="generatedName">
+        <span class="name-part">Click to generate a name</span>
+      </div>
+      <div id="meaningText"></div>
+    </div>
+  </div>
+  
+  <button onclick="generateName()">Generate Name</button>
+</div>
+
+<script>
+const firstNames = {
+  male: [
+    {name: "Amihan", meaning: "North wind"},
+    {name: "Bathala", meaning: "Supreme being"},
+    {name: "Dakila", meaning: "Great, noble"},
+    {name: "Habagat", meaning: "South wind"},
+    {name: "Isagani", meaning: "Witness"},
+    {name: "Kidlat", meaning: "Lightning"},
+    {name: "Makisig", meaning: "Elegant, graceful"},
+    {name: "Tala", meaning: "Star"},
+  ],
+  female: [
+    {name: "Amara", meaning: "Grace"},
+    {name: "Bituin", meaning: "Star"},
+    {name: "Diwata", meaning: "Fairy, spirit"},
+    {name: "Hiraya", meaning: "May your dreams come true"},
+    {name: "Ligaya", meaning: "Happiness"},
+    {name: "Mayumi", meaning: "Gentle, soft"},
+    {name: "Sampaguita", meaning: "National flower of Philippines"},
+    {name: "Tala", meaning: "Star"},
+  ]
+};
+
+const lastNames = [
+  {name: "Santos", meaning: "Saints"},
+  {name: "Reyes", meaning: "Kings"},
+  {name: "Cruz", meaning: "Cross"},
+  {name: "Bautista", meaning: "Baptist"},
+  {name: "Mendoza", meaning: "Cold mountain"},
+  {name: "Del Rosario", meaning: "Of the Rosary"},
+  {name: "Garcia", meaning: "Bear"},
+  {name: "Dela Cruz", meaning: "Of the Cross"}
+];
+
+function generateName() {
+  const gender = Math.random() < 0.5 ? 'male' : 'female';
+  const firstName = firstNames[gender][Math.floor(Math.random() * firstNames[gender].length)];
+  const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+  
+  // Clear previous content
+  const nameContainer = document.getElementById('generatedName');
+  const meaningContainer = document.getElementById('meaningText');
+  nameContainer.innerHTML = '';
+  meaningContainer.innerHTML = '';
+  
+  // Add reveal overlay
+  const revealOverlay = document.createElement('div');
+  revealOverlay.className = 'reveal-overlay';
+  nameContainer.parentElement.appendChild(revealOverlay);
+  
+  // Create first name with character animation
+  const firstNameSpan = document.createElement('span');
+  firstNameSpan.className = 'name-part';
+  firstName.name.split('').forEach((char, index) => {
+    const charSpan = document.createElement('span');
+    charSpan.className = 'name-char';
+    charSpan.textContent = char;
+    charSpan.style.animationDelay = `${index * 0.05}s`;
+    firstNameSpan.appendChild(charSpan);
+  });
+  
+  // Add space
+  const spaceSpan = document.createElement('span');
+  spaceSpan.className = 'name-char';
+  spaceSpan.innerHTML = '&nbsp;';
+  firstNameSpan.appendChild(spaceSpan);
+  
+  // Create last name with character animation
+  const lastNameSpan = document.createElement('span');
+  lastNameSpan.className = 'name-part';
+  lastName.name.split('').forEach((char, index) => {
+    const charSpan = document.createElement('span');
+    charSpan.className = 'name-char';
+    charSpan.textContent = char;
+    charSpan.style.animationDelay = `${(firstName.name.length + index + 1) * 0.05}s`;
+    lastNameSpan.appendChild(charSpan);
+  });
+  
+  nameContainer.appendChild(firstNameSpan);
+  nameContainer.appendChild(lastNameSpan);
+  
+  // Create and add meaning spans with delayed animation
+  const firstMeaningSpan = document.createElement('span');
+  firstMeaningSpan.className = 'meaning-part';
+  firstMeaningSpan.textContent = `First name means "${firstName.meaning}"`;
+  
+  const separator = document.createElement('span');
+  separator.className = 'meaning-part';
+  separator.textContent = '•';
+  
+  const lastMeaningSpan = document.createElement('span');
+  lastMeaningSpan.className = 'meaning-part';
+  lastMeaningSpan.textContent = `Last name means "${lastName.meaning}"`;
+  
+  meaningContainer.appendChild(firstMeaningSpan);
+  meaningContainer.appendChild(separator);
+  meaningContainer.appendChild(lastMeaningSpan);
+  
+  // Trigger animations with delay
+  setTimeout(() => {
+    firstNameSpan.classList.add('name-reveal');
+    lastNameSpan.classList.add('name-reveal');
+  }, 300);
+  
+  setTimeout(() => {
+    firstMeaningSpan.classList.add('meaning-reveal');
+    separator.classList.add('meaning-reveal');
+    lastMeaningSpan.classList.add('meaning-reveal');
+  }, 800);
+  
+  // Remove reveal overlay after animation
+  setTimeout(() => {
+    revealOverlay.remove();
+  }, 1000);
+}
+
+// Initialize with first animation
+window.onload = () => {
+  const initialSpan = document.querySelector('.name-part');
+  initialSpan.classList.add('name-reveal');
+};
+</script>
+
+</body></html>
